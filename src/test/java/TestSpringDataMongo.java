@@ -289,6 +289,7 @@ public class TestSpringDataMongo {
         Update update = Update.update("name","李亚2");
         PassPersonEntity testTable = mongoTemplate.findAndModify(query, update, PassPersonEntity.class, "testTable");
         System.out.println(testTable.toString());
+
     }
 
 
