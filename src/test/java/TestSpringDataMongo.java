@@ -1,8 +1,10 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hisign.entity.PassPersonEntity;
+import com.hisign.entity.UserProducts;
 import com.hisign.repository.PassPersonRepository;
 import com.hisign.utils.CommonUtils;
 import com.hisign.vo.StatVO;
+import com.hisign.vo.UserProdAggVO;
 import com.mongodb.WriteResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -29,7 +32,7 @@ import java.util.List;
  * mongo java driver 文档：请参考：http://mongodb.github.io/mongo-java-driver/3.4/
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:spring-mongo-old.xml"})
+@ContextConfiguration(locations={"classpath:spring-mongo.xml"})
 public class TestSpringDataMongo {
 
 
@@ -287,6 +290,36 @@ public class TestSpringDataMongo {
         PassPersonEntity testTable = mongoTemplate.findAndModify(query, update, PassPersonEntity.class, "testTable");
         System.out.println(testTable.toString());
     }
+
+
+    @Test
+    public void testAggregation(){
+        try {
+//            Aggregation aggregation = Aggregation.newAggregation(Aggregation.group("userId").sum("prods").as("total"));
+            Aggregation aggregation = Aggregation.newAggregation(Aggregation.group("userId").sum("prods.001").as("total"));
+
+            AggregationResults<UserProdAggVO> aggregate = mongoTemplate.aggregate(aggregation, UserProducts.class, UserProdAggVO.class);
+
+            List<UserProdAggVO> mappedResults = aggregate.getMappedResults();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    @Test
+    public void testAggregation1(){
+        Aggregation aggregation = Aggregation.newAggregation(Aggregation.group("userId").count().as("total"));
+        AggregationResults<Map> aggregate = mongoTemplate.aggregate(aggregation, UserProducts.class, Map.class);
+        aggregate.forEach(x-> System.out.println(x));
+    }
+
+    @Test
+    public void testFindAll(){
+        List<UserProducts> all = mongoTemplate.findAll(UserProducts.class);
+        all.forEach(x-> System.out.println(x));
+    }
+
 
 
 

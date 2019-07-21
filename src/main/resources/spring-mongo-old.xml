@@ -11,7 +11,7 @@
 
 	<!-- 定义mongo对象，对应的是mongodb官方jar包中的Mongo，replica-set设置集群副本的ip地址和端口 -->
 	<mongo:mongo id="mongo"
-		replica-set="192.168.30.192:29017,192.168.30.193:29017,192.168.30.194:29017">
+		replica-set="192.168.1.60:27017">
 		<mongo:options connections-per-host="8"
 			threads-allowed-to-block-for-connection-multiplier="4"
 			connect-timeout="1000" max-wait-time="1500" auto-connect-retry="true"
@@ -20,7 +20,7 @@
 	</mongo:mongo>
 
 	<!-- mongo的工厂，通过它来取得mongo实例,dbname为mongodb的数据库名，没有的话会自动创建 -->
-	<mongo:db-factory dbname="o2m" mongo-ref="mongo"/>
+	<mongo:db-factory dbname="test" mongo-ref="mongo"/>
 
 	<bean id="mappingContext" class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
 	<!-- 配置mongodb映射类型 -->
