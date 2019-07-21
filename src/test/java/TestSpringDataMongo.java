@@ -321,7 +321,10 @@ public class TestSpringDataMongo {
         all.forEach(x-> System.out.println(x));
     }
 
+    @Test
+    public void test111(){
 
+    }
 
 
 
